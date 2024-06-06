@@ -1,7 +1,9 @@
 import sparta.SampleUsers;
 import sparta.User;
 import sparta.enumtype.DiscountEvent;
+import sparta.enumtype.OrderStatus;
 import sparta.service.Coupon;
+import sparta.service.Order;
 import sparta.service.Product;
 
 import java.util.List;
@@ -9,7 +11,10 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         lambdaTest();
+        System.out.println("---------------------------------------------------------");
         enumTest();
+        System.out.println("---------------------------------------------------------");
+        orderTest();
     }
 
     private static void enumTest() {
@@ -21,6 +26,23 @@ public class Main {
 
         System.out.println("couponPrice = " + couponPrice);
         System.out.println("productPrice = " + productPrice);
+    }
+
+    private static void orderTest(){
+        final Order order1 = new Order("램 16GB", OrderStatus.ORDER_RECEIVED);
+
+        System.out.println(order1.getProductName() + ", isChangable? PRODUCT_SHIPPED = " + order1.isChangable(OrderStatus.PRODUCT_SHIPPED)); // 주문 -> 발송으로 변경
+        System.out.println(order1.getProductName() + ", isChangable? DELIVERED  = " + order1.isChangable(OrderStatus.DELIVERED)); // 주문 -> 배송 완료로 변경
+        System.out.println(order1.getProductName() + ", isChangable? PRODUCT_PREPARING  = " + order1.isChangable(OrderStatus.PRODUCT_PREPARING)); // 주문 -> 접수로 변경
+
+        System.out.println("---------------------------------------------------------");
+
+        final Order order2 = new Order("RTX 4090", OrderStatus.PRODUCT_PREPARING);
+
+        System.out.println(order2.getProductName() + ", isChangable? CANCELED = " + order2.isChangable(OrderStatus.CANCELED)); // 접수 -> 취소로 변경
+        System.out.println(order2.getProductName() + ", isChangable? PRODUCT_SHIPPED  = " + order2.isChangable(OrderStatus.PRODUCT_SHIPPED)); // 접수 -> 발송으로 변경
+        System.out.println(order2.getProductName() + ", isChangable? ORDER_RECEIVED  = " + order2.isChangable(OrderStatus.ORDER_RECEIVED)); // 접수 ->  주문으로 변경
+        System.out.println(order2.getProductName() + ", isChangable? DELIVERED  = " + order2.isChangable(OrderStatus.DELIVERED)); // 접수 ->  배송완료로 변경
     }
 
     private static void lambdaTest() {
